@@ -1,0 +1,81 @@
+
+version: "3.9"
+
+services:
+  db:
+    container_name: demo.db
+    image: cloudtech52/demo:db
+    restart: always
+    user: root
+    ports:
+      - 1433:1433
+    volumes:
+      - /data/mssql/data:/var/opt/mssql/data
+      - /data/mssql/logs:/var/opt/mssql/log
+      - /data/mssql/secrets:/var/opt/mssql/secrets
+    networks:
+      - demonet
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: (@MyVery.StrongPass@).3455
+      MSSQL_DB: NetChatApp
+      MSSQL_DB_USER: chatadmin
+      MSSQL_DB_PASS: ChatPass24!
+
+  app:
+    container_name: demo.app
+    image: cloudtech52/demo:app
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - 8500:5500
+    networks:
+      - demonet
+    environment:
+      DB_HOST: db,1433
+      DB_NAME: NetChatApp
+      DB_USER: chatadmin
+      DB_PASS: ChatPass24!
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HOSTINGSTARTUPASSEMBLIES: Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation
+      ASPNETCORE_URLS: http://0.0.0.0:5500
+
+  prometheus:
+    container_name: demo.prometheus
+    image: prom/prometheus
+    restart: always
+    depends_on:
+      - db
+      - app
+    ports:
+      - 3001:9090
+    volumes:
+      - ./prometheus/config.yml:/etc/prometheus/prometheus.yml:Z
+    networks:
+      - demonet
+  
+  grafana:
+    container_name: demo.grafana
+    image: grafana/grafana-oss
+    restart: always
+    depends_on:
+      - db
+      - app
+      # - prometheus
+    ports:
+      - 3002:3000
+    volumes:
+      - /data/grafana:/var/lib/grafana:Z
+    networks:
+      - demonet
+
+# volumes:
+#   mssql_data: {}
+#   mssql_logs: {}
+#   mssql_secrets: {}
+#   grafana_data: {}
+
+networks:
+  demonet:
+    name: demonet
