@@ -71,7 +71,8 @@ services:
       - demonet
 
 volumes:
-  grafana_data: {}
+  grafana_data:
+    name: grafana_data
 
 networks:
   demonet:
