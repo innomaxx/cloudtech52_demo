@@ -21,4 +21,4 @@ scrape_configs:
   scheme: http  
   static_configs:  
   - targets:  
-    - host.docker.internal:5500
+    - app:5500
