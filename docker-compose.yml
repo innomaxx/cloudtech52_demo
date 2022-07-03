@@ -60,9 +60,8 @@ services:
     image: grafana/grafana-oss
     restart: always
     depends_on:
-      - db
       - app
-      # - prometheus
+      - prometheus
     ports:
       - 3002:3000
     volumes:
