@@ -66,15 +66,12 @@ services:
     ports:
       - 3002:3000
     volumes:
-      - /data/grafana:/var/lib/grafana:rw
+      - grafana_data:/var/lib/grafana
     networks:
       - demonet
 
-# volumes:
-#   mssql_data: {}
-#   mssql_logs: {}
-#   mssql_secrets: {}
-#   grafana_data: {}
+volumes:
+  grafana_data: {}
 
 networks:
   demonet:
