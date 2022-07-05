@@ -17,8 +17,10 @@ pipeline {
     stages {
         stage('Infrastructure Init') {
             steps {
-                dir('./terraform') {
-                    sh 'terraform init'
+                withAWS(credentials: 'aws-credentials', region: 'eu-central-1') {
+                    dir('./terraform') {
+                        sh 'terraform init'
+                    }
                 }
             }
         }
@@ -28,8 +30,10 @@ pipeline {
                 environment name: 'ACTION', value: 'plan';
             }
             steps {
-                dir('./terraform') {
-                    sh 'terraform plan'
+                withAWS(credentials: 'aws-credentials', region: 'eu-central-1') {
+                    dir('./terraform') {
+                        sh 'terraform plan'
+                    }
                 }
             }
         }
@@ -39,8 +43,10 @@ pipeline {
                 environment name: 'ACTION', value: 'apply';
             }
             steps {
-                dir('./terraform') {
-                    sh 'terraform apply -auto-approve'
+                withAWS(credentials: 'aws-credentials', region: 'eu-central-1') {
+                    dir('./terraform') {
+                        sh 'terraform apply -auto-approve'
+                    }
                 }
             }
         }
@@ -50,8 +56,10 @@ pipeline {
                 environment name: 'ACTION', value: 'destroy';
             }
             steps {
-                dir('./terraform') {
-                   sh 'terraform destroy -auto-approve'
+                withAWS(credentials: 'aws-credentials', region: 'eu-central-1') {
+                    dir('./terraform') {
+                        sh 'terraform destroy -auto-approve'
+                    }
                 }
             }
         }
