@@ -1,0 +1,55 @@
+
+version: "3.9"
+
+services:
+  app:
+    container_name: demo.app
+    image: 681245553976.dkr.ecr.eu-central-1.amazonaws.com/demorepo:app
+    restart: unless-stopped
+    ports:
+      - 8500:5500
+    networks:
+      - demonet
+    environment:
+      DB_HOST: demodb.ckl1ewsquv82.eu-central-1.rds.amazonaws.com,1433
+      DB_NAME: NetChatApp
+      DB_USER: sa
+      DB_PASS: StrongPass.3455
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HOSTINGSTARTUPASSEMBLIES: Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation
+      ASPNETCORE_URLS: http://0.0.0.0:5500
+
+  prometheus:
+    container_name: demo.prometheus
+    image: prom/prometheus
+    restart: always
+    depends_on:
+      - app
+    ports:
+      - 3001:9090
+    volumes:
+      - ./prometheus/config.yml:/etc/prometheus/prometheus.yml:Z
+    networks:
+      - demonet
+  
+  grafana:
+    container_name: demo.grafana
+    image: grafana/grafana-oss
+    restart: always
+    depends_on:
+      - app
+      - prometheus
+    ports:
+      - 3002:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - demonet
+
+volumes:
+  grafana_data:
+    name: grafana_data
+
+networks:
+  demonet:
+    name: demonet
