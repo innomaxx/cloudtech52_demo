@@ -2,6 +2,10 @@
 pipeline {
     agent any
 
+    tools {
+        terraform 'terraform'
+    }
+
     parameters {
         choice(
             choices: ['plan', 'apply', 'destroy'],
