@@ -13,7 +13,9 @@ pipeline {
     stages {
         stage('Infrastructure Init') {
             steps {
-                sh 'terraform init'
+                dir('./terraform') {
+                    sh 'terraform init'
+                }
             }
         }
 
@@ -22,7 +24,9 @@ pipeline {
                 environment name: 'ACTION', value: 'plan';
             }
             steps {
-                sh 'terraform plan'
+                dir('./terraform') {
+                    sh 'terraform plan'
+                }
             }
         }
 
@@ -31,7 +35,9 @@ pipeline {
                 environment name: 'ACTION', value: 'apply';
             }
             steps {
-                sh 'terraform apply -auto-approve'
+                dir('./terraform') {
+                    sh 'terraform apply -auto-approve'
+                }
             }
         }
 
@@ -40,7 +46,9 @@ pipeline {
                 environment name: 'ACTION', value: 'destroy';
             }
             steps {
-                sh 'terraform destroy -auto-approve'
+                dir('./terraform') {
+                   sh 'terraform destroy -auto-approve'
+                }
             }
         }
     }
