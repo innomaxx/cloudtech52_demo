@@ -11,10 +11,10 @@ services:
     networks:
       - demonet
     environment:
-      DB_HOST: demodb.ckl1ewsquv82.eu-central-1.rds.amazonaws.com,1433
-      DB_NAME: NetChatApp
-      DB_USER: sa
-      DB_PASS: StrongPass.3455
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_HOSTINGSTARTUPASSEMBLIES: Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation
       ASPNETCORE_URLS: http://0.0.0.0:5500
