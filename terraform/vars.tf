@@ -13,3 +13,8 @@ variable "aws_ami" {
   description = "AWS AMI ID"
   default     = ""
 }
+
+variable "aws_eip_alloc_id" {
+  description = "AWS EIP Allocation ID"
+  default     = ""
+}
