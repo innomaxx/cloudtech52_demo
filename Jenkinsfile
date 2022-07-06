@@ -14,6 +14,12 @@ pipeline {
         )
     }
 
+    environment {
+        withCredentials([string(credentialsId: 'aws_eip_alloc_id', variable: 'AWS_EIP_ALLOC_ID')]) {
+            TF_VAR_aws_eip_alloc_id = $AWS_EIP_ALLOC_ID
+        }
+    }
+
     stages {
         stage('Infrastructure Init') {
             steps {
