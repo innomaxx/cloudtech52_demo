@@ -1,4 +1,5 @@
 
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ using Chat.Web.Data;
 using Chat.Web.Helpers;
 using Chat.Web.Hubs;
 using Chat.Web.Models;
+
+#nullable enable
 
 namespace Chat.Web
 {
@@ -50,6 +53,15 @@ namespace Chat.Web
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext dbContext)
         {
             dbContext.Database.Migrate();
+
+            string? pathBase = Environment.GetEnvironmentVariable("ASPNETCORE_PATH_BASE");
+            if (!string.IsNullOrWhiteSpace(pathBase))
+            {
+                app.Use((context, next) => {
+                    context.Request.PathBase = pathBase;
+                    return next();
+                }); 
+            }
             
             if (env.IsDevelopment())
             {
