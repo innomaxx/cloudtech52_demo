@@ -33,3 +33,8 @@ resource "aws_security_group" "sg" {
   }
 
 }
+
+resource "aws_eip_association" "eip_assoc" {
+  instance_id = aws_instance.app_server.id
+  allocation_id = var.aws_eip_alloc_id
+}
