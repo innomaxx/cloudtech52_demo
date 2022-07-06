@@ -9,7 +9,19 @@ resource "aws_instance" "app_server" {
   ami                    = "ami-065deacbcaac64cf2"
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.sg.id]
-  user_data              = file("init.sh")
+  user_data              = <<-EOF
+     #!/bin/bash
+     curl -fsSL https://get.docker.com -o get-docker.sh
+     sudo sh get-docker.sh
+     mkdir app && cd app
+     git clone https://github.com/innomaxx/cloudtech52_demo.git .
+     git checkout feature/hide_creds
+     echo DB_HOST=\${var.db_host} >> .env
+     echo DB_NAME=\${var.db_name} >> .env
+     echo DB_USER=\${var.db_user} >> .env
+     echo DB_PASS="${var.db_pass}" >> .env
+     sudo docker compose -f "docker-compose.prod.yml" up -d
+  EOF
 
   tags = {
     Name = "instance"

@@ -18,3 +18,23 @@ variable "aws_eip_alloc_id" {
   description = "AWS EIP Allocation ID"
   default     = ""
 }
+
+variable "db_host" {
+  description = "App database host"
+  default     = ""
+}
+
+variable "db_name" {
+  description = "App database name"
+  default     = ""
+}
+
+variable "db_user" {
+  description = "App database user"
+  default     = ""
+}
+
+variable "db_pass" {
+  description = "App database password"
+  default     = ""
+}

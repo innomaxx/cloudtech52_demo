@@ -16,6 +16,10 @@ pipeline {
 
     environment {
         TF_VAR_aws_eip_alloc_id = credentials('aws_eip_alloc_id')
+        TF_VAR_db_host = credentials('db_host')
+        TF_VAR_db_name = credentials('db_name')
+        TF_VAR_db_user = credentials('db_user')
+        TF_VAR_db_pass = credentials('db_pass')
     }
 
     stages {
