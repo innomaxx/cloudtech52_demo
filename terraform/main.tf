@@ -9,7 +9,7 @@ resource "aws_instance" "app_server" {
   ami                    = "ami-065deacbcaac64cf2"
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.sg.id]
-  user_data              = <<-EOF
+  user_data              = << EOF
      curl -fsSL https://get.docker.com -o get-docker.sh
      sudo sh get-docker.sh
      mkdir app && cd app
