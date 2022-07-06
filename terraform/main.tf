@@ -19,7 +19,7 @@ resource "aws_instance" "app_server" {
      echo DB_HOST=\${var.db_host} >> .env
      echo DB_NAME=\${var.db_name} >> .env
      echo DB_USER=\${var.db_user} >> .env
-     echo DB_PASS="\${var.db_pass}" >> .env
+     echo DB_PASS="${var.db_pass}" >> .env
      sudo docker compose -f "docker-compose.prod.yml" up -d
   EOF
 
