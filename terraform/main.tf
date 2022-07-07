@@ -9,7 +9,7 @@ resource "aws_instance" "app_server" {
   ami                    = "ami-065deacbcaac64cf2"
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.sg.id]
-  availability_zone      = data.aws_ebs_volume.ext_storage.availability_zone
+  availability_zone      = data.aws_ebs_volume.ebs_volume.availability_zone
 
   user_data              = <<-EOF
      #!/bin/bash
