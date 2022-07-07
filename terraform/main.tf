@@ -17,11 +17,17 @@ resource "aws_instance" "app_server" {
      sudo sh get-docker.sh
      mkdir app && cd app
      git clone https://github.com/innomaxx/cloudtech52_demo.git .
-     git checkout feature/hide_creds
+     git checkout feature/attach_ebs
+     
      echo DB_HOST=\${var.db_host} >> .env
      echo DB_NAME=\${var.db_name} >> .env
      echo DB_USER=\${var.db_user} >> .env
      echo DB_PASS="${var.db_pass}" >> .env
+     
+     sudo mkdir -p /mnt/data
+     sudo mount /dev/xvdx /mnt/data
+     echo USER_ID=$(id -u) >> .env
+     
      sudo docker compose -f "docker-compose.prod.yml" up -d
   EOF
 

@@ -36,19 +36,16 @@ services:
     container_name: demo.grafana
     image: grafana/grafana-oss
     restart: always
+    user: ${USER_ID}
     depends_on:
       - app
       - prometheus
     ports:
       - 3002:3000
     volumes:
-      - grafana_data:/var/lib/grafana
+      - /mnt/data/grafana:/var/lib/grafana
     networks:
       - demonet
-
-volumes:
-  grafana_data:
-    name: grafana_data
 
 networks:
   demonet:
