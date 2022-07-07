@@ -9,6 +9,8 @@ resource "aws_instance" "app_server" {
   ami                    = "ami-065deacbcaac64cf2"
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.sg.id]
+  availability_zone      = data.aws_ebs_volume.ext_storage.availability_zone
+
   user_data              = <<-EOF
      #!/bin/bash
      curl -fsSL https://get.docker.com -o get-docker.sh
@@ -63,4 +65,10 @@ resource "aws_security_group" "sg" {
 resource "aws_eip_association" "eip_assoc" {
   instance_id = aws_instance.app_server.id
   allocation_id = var.aws_eip_alloc_id
+}
+
+resource "aws_volume_attachment" "ext_storage" {
+  volume_id   = var.aws_ebs_volume_id
+  instance_id = aws_instance.app_server.id
+  device_name = "/dev/sdx"
 }

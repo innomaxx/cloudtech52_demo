@@ -19,6 +19,11 @@ variable "aws_eip_alloc_id" {
   default     = ""
 }
 
+variable "aws_ebs_volume_id" {
+  description = "AWS EBS Volume ID"
+  default     = ""
+}
+
 variable "db_host" {
   description = "App database host"
   default     = ""
