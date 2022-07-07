@@ -9,17 +9,25 @@ resource "aws_instance" "app_server" {
   ami                    = "ami-065deacbcaac64cf2"
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.sg.id]
+  availability_zone      = data.aws_ebs_volume.ebs_volume.availability_zone
+
   user_data              = <<-EOF
      #!/bin/bash
      curl -fsSL https://get.docker.com -o get-docker.sh
      sudo sh get-docker.sh
      mkdir app && cd app
      git clone https://github.com/innomaxx/cloudtech52_demo.git .
-     git checkout feature/hide_creds
+     git checkout feature/attach_ebs
+     
      echo DB_HOST=\${var.db_host} >> .env
      echo DB_NAME=\${var.db_name} >> .env
      echo DB_USER=\${var.db_user} >> .env
      echo DB_PASS="${var.db_pass}" >> .env
+     
+     sudo mkdir -p /mnt/data
+     sudo mount /dev/xvdx /mnt/data
+     echo USER_ID=$(id -u) >> .env
+     
      sudo docker compose -f "docker-compose.prod.yml" up -d
   EOF
 
@@ -63,4 +71,10 @@ resource "aws_security_group" "sg" {
 resource "aws_eip_association" "eip_assoc" {
   instance_id = aws_instance.app_server.id
   allocation_id = var.aws_eip_alloc_id
+}
+
+resource "aws_volume_attachment" "ext_storage" {
+  volume_id   = var.aws_ebs_volume_id
+  instance_id = aws_instance.app_server.id
+  device_name = "/dev/sdx"
 }
